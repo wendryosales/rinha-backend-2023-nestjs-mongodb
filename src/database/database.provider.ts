@@ -9,6 +9,7 @@ export const databaseProviders = [
           username: 'root',
           password: 'root',
         },
+        dbName: 'nestjs',
       }),
   },
 ];

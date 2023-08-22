@@ -9,8 +9,8 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { CreatePersonDto } from './dtos/create-person.dto';
-import { UUID } from 'crypto';
 import { PessoaService } from './pessoa.service';
+import { ObjectId } from 'mongoose';
 
 @Controller('pessoas')
 export class PessoaController {
@@ -35,7 +35,7 @@ export class PessoaController {
   }
 
   @Get(':id')
-  getPerson(@Param('id') id: UUID) {
+  getPerson(@Param('id') id: ObjectId) {
     return this.pessoaService.getPerson(id);
   }
 }

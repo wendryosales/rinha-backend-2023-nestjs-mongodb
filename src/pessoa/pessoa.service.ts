@@ -4,8 +4,7 @@ import {
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { CreatePersonDto } from './dtos/create-person.dto';
-import { Model } from 'mongoose';
-import { UUID } from 'crypto';
+import { Model, ObjectId } from 'mongoose';
 import { Pessoa } from './pessoa.interface';
 
 @Injectable()
@@ -40,7 +39,7 @@ export class PessoaService {
       .exec();
   }
 
-  getPerson(id: UUID) {
+  getPerson(id: ObjectId) {
     return this.pessoaModel.findById(id).exec();
   }
 

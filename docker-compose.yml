@@ -6,13 +6,12 @@ services:
     hostname: api01
     depends_on:
       - db
-      - redis
     expose:
       - '3000'
     deploy:
       resources:
         limits:
-          cpus: '0.42'
+          cpus: '0.40'
           memory: '0.75GB'
 
   api02:
@@ -20,17 +19,15 @@ services:
     hostname: api02
     depends_on:
       - db
-      - redis
     expose:
       - '3000'
     deploy:
       resources:
         limits:
-          cpus: '0.42'
+          cpus: '0.40'
           memory: '0.75GB'
 
   nginx:
-    # Load Balancer
     image: nginx:latest
     volumes:
       - ./nginx.conf:/etc/nginx/nginx.conf:ro
@@ -49,7 +46,7 @@ services:
     image: mongo:latest
     hostname: db
     environment:
-      - MONGO_INITDB_DATABASE=elysia
+      - MONGO_INITDB_DATABASE=nestjs
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=root
     command: mongod --quiet --logpath /dev/null
@@ -58,20 +55,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.51'
-          memory: '1GB'
-
-  redis:
-    image: redis:latest
-    hostname: redis
-    ports:
-      - '6379:6379'
-    command: redis-server --save "" --appendonly no
-    deploy:
-      resources:
-        limits:
-          cpus: '0.1'
-          memory: '0.25GB'
+          cpus: '0.45'
+          memory: '1.25GB'
 
 networks:
   default:
