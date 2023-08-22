@@ -1,0 +1,79 @@
+version: '3.5'
+
+services:
+  api01:
+    build: ./
+    hostname: api01
+    depends_on:
+      - db
+      - redis
+    expose:
+      - '3000'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.42'
+          memory: '0.75GB'
+
+  api02:
+    build: ./
+    hostname: api02
+    depends_on:
+      - db
+      - redis
+    expose:
+      - '3000'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.42'
+          memory: '0.75GB'
+
+  nginx:
+    # Load Balancer
+    image: nginx:latest
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - api01
+      - api02
+    ports:
+      - '9999:9999'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.25'
+          memory: '0.25GB'
+
+  db:
+    image: mongo:latest
+    hostname: db
+    environment:
+      - MONGO_INITDB_DATABASE=elysia
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=root
+    command: mongod --quiet --logpath /dev/null
+    ports:
+      - '27017:27017'
+    deploy:
+      resources:
+        limits:
+          cpus: '0.51'
+          memory: '1GB'
+
+  redis:
+    image: redis:latest
+    hostname: redis
+    ports:
+      - '6379:6379'
+    command: redis-server --save "" --appendonly no
+    deploy:
+      resources:
+        limits:
+          cpus: '0.1'
+          memory: '0.25GB'
+
+networks:
+  default:
+    driver: bridge
+    name: rinha
