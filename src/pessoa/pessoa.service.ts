@@ -1,30 +1,17 @@
-import {
-  Inject,
-  Injectable,
-  UnprocessableEntityException,
-} from '@nestjs/common';
-import { CreatePersonDto } from './dtos/create-person.dto';
-import { Model } from 'mongoose';
-import { UUID } from 'crypto';
+import { Inject, Injectable } from '@nestjs/common';
+import { Model, ObjectId } from 'mongoose';
 import { Pessoa } from './pessoa.interface';
 
 @Injectable()
 export class PessoaService {
   constructor(@Inject('PESSOA_MODEL') private pessoaModel: Model<Pessoa>) {}
 
-  createPerson(body: CreatePersonDto) {
-    if (
-      this.pessoaModel
-        .findOne({
-          apelido: body.apelido,
-        })
-        .exec()
-    ) {
-      throw new UnprocessableEntityException('Apelido já existe');
-    }
-    const createdPerson = new this.pessoaModel(body);
-
-    return createdPerson.save();
+  checkIfExists(apelido: string) {
+    return this.pessoaModel
+      .findOne({
+        apelido: apelido,
+      })
+      .exec();
   }
 
   getPersons(t: string) {
@@ -40,7 +27,7 @@ export class PessoaService {
       .exec();
   }
 
-  getPerson(id: UUID) {
+  getPerson(id: ObjectId) {
     return this.pessoaModel.findById(id).exec();
   }
 

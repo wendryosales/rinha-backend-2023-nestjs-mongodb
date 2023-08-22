@@ -7,23 +7,43 @@ import {
   Post,
   Query,
   UnprocessableEntityException,
+  Res,
 } from '@nestjs/common';
 import { CreatePersonDto } from './dtos/create-person.dto';
-import { UUID } from 'crypto';
 import { PessoaService } from './pessoa.service';
+import { InjectQueue } from '@nestjs/bull';
+import mongoose, { ObjectId } from 'mongoose';
+import { Queue } from 'bull';
+import { Response } from 'express';
 
 @Controller('pessoas')
 export class PessoaController {
-  constructor(private readonly pessoaService: PessoaService) {}
+  constructor(
+    @InjectQueue('pessoa') private readonly pessoaQueue: Queue,
+    private readonly pessoaService: PessoaService,
+  ) {}
 
   @Post('/')
-  createPerson(@Body() body: CreatePersonDto) {
+  async createPerson(@Res() res: Response, @Body() body: CreatePersonDto) {
     const { nome, apelido, nascimento } = body;
     if (!nome || !apelido || !nascimento) {
       throw new UnprocessableEntityException();
     }
 
-    return this.pessoaService.createPerson(body);
+    const apelidoExists = await this.pessoaService.checkIfExists(apelido);
+    if (apelidoExists) {
+      throw new UnprocessableEntityException('Apelido já existe');
+    }
+    const id = new mongoose.Types.ObjectId();
+    this.pessoaQueue.add('createPerson', {
+      id,
+      ...body,
+    });
+
+    res.set('Location', `/pessoas/${id}`);
+    res.status(201).send({
+      message: 'Pessoa criada com sucesso',
+    });
   }
 
   @Get('/')
@@ -35,7 +55,11 @@ export class PessoaController {
   }
 
   @Get(':id')
-  getPerson(@Param('id') id: UUID) {
-    return this.pessoaService.getPerson(id);
+  async getPerson(@Param('id') id: ObjectId) {
+    const person = await this.pessoaService.getPerson(id);
+    if (!person) {
+      throw new BadRequestException();
+    }
+    return person;
   }
 }

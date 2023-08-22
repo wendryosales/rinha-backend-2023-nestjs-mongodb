@@ -1,5 +1,6 @@
 import { Connection } from 'mongoose';
 import { PessoaSchema } from './pessoa.schema';
+import { CreatePersonConsumer } from './consumers/create-person.consumer';
 
 export const pessoaProviders = [
   {
@@ -8,4 +9,5 @@ export const pessoaProviders = [
       connection.model('Pessoa', PessoaSchema),
     inject: ['DATABASE_CONNECTION'],
   },
+  CreatePersonConsumer,
 ];
