@@ -1,6 +1,7 @@
 import { Module } from '@nestjs/common';
 import { PessoaModule } from './pessoa/pessoa.module';
 import { BullModule } from '@nestjs/bull';
+import { CacheModule } from '@nestjs/cache-manager';
 
 @Module({
   imports: [
@@ -11,6 +12,7 @@ import { BullModule } from '@nestjs/bull';
         port: 6379,
       },
     }),
+    CacheModule.register(),
   ],
 })
 export class AppModule {}

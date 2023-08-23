@@ -8,14 +8,17 @@ import {
   Query,
   Res,
   UnprocessableEntityException,
+  UseInterceptors,
 } from '@nestjs/common';
 import { CreatePersonDto } from './dtos/create-person.dto';
 import { PessoaService } from './pessoa.service';
 import { ObjectId } from 'mongoose';
 import { randomUUID } from 'crypto';
 import { Response } from 'express';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('pessoas')
+@UseInterceptors(CacheInterceptor)
 export class PessoaController {
   constructor(private readonly pessoaService: PessoaService) {}
 
