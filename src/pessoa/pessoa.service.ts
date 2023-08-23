@@ -6,10 +6,15 @@ import {
 import { Model, ObjectId } from 'mongoose';
 import { Pessoa } from './pessoa.interface';
 import { CreatePersonDto } from './dtos/create-person.dto';
+import { InjectQueue } from '@nestjs/bull';
+import { Queue } from 'bull';
 
 @Injectable()
 export class PessoaService {
-  constructor(@Inject('PESSOA_MODEL') private pessoaModel: Model<Pessoa>) {}
+  constructor(
+    @InjectQueue('pessoa') private readonly pessoaQueue: Queue,
+    @Inject('PESSOA_MODEL') private pessoaModel: Model<Pessoa>,
+  ) {}
 
   async createPerson(body: CreatePersonDto & { id: string }) {
     if (
@@ -22,9 +27,8 @@ export class PessoaService {
       throw new UnprocessableEntityException('Apelido já existe');
     }
 
-    const createdPerson = new this.pessoaModel(body);
-
-    return createdPerson.save();
+    await this.pessoaQueue.add('createPerson', body);
+    return;
   }
 
   getPersons(t: string) {
