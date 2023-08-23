@@ -15,3 +15,10 @@ PessoaSchema.set('toJSON', {
     delete ret._id;
   },
 });
+
+PessoaSchema.index({ nome: 'text', apelido: 'text', stack: 'text' });
+PessoaSchema.index({
+  nome: 'ascending',
+  apelido: 'ascending',
+  stack: 'ascending',
+});
