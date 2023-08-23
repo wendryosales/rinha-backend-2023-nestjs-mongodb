@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   api01:
-    build: .
+    image: wendryo/rinha-nestjs-mongo
     hostname: api01
     depends_on:
       - db
@@ -16,7 +16,7 @@ services:
           memory: '0.7GB'
 
   api02:
-    build: .
+    image: wendryo/rinha-nestjs-mongo
     hostname: api02
     depends_on:
       - db
