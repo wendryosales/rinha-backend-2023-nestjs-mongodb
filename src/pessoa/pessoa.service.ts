@@ -35,7 +35,6 @@ export class PessoaService {
   async getPersons(t: string) {
     const cached = await this.cacheManager.get(t);
     if (cached) {
-      await this.cacheManager.del(t);
       return JSON.parse(cached as string);
     }
     const persons = await this.pessoaModel
