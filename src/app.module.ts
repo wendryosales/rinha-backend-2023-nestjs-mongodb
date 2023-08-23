@@ -12,7 +12,9 @@ import { CacheModule } from '@nestjs/cache-manager';
         port: 6379,
       },
     }),
-    CacheModule.register(),
+    CacheModule.register({
+      isGlobal: true,
+    }),
   ],
 })
 export class AppModule {}
