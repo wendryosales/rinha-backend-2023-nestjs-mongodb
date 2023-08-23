@@ -16,7 +16,8 @@ PessoaSchema.set('toJSON', {
   },
 });
 
-PessoaSchema.index({ nome: 'text', apelido: 'text', stack: 'text' });
+PessoaSchema.index({ nome: 'text', apelido: 'text' });
+PessoaSchema.index({ stack: 1 });
 PessoaSchema.index({
   nome: 'ascending',
   apelido: 'ascending',

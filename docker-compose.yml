@@ -2,7 +2,7 @@ version: '3.5'
 
 services:
   api01:
-    build: ./
+    build: .
     hostname: api01
     depends_on:
       - db
@@ -13,10 +13,10 @@ services:
       resources:
         limits:
           cpus: '0.37'
-          memory: '0.4GB'
+          memory: '0.7GB'
 
   api02:
-    build: ./
+    build: .
     hostname: api02
     depends_on:
       - db
@@ -27,7 +27,7 @@ services:
       resources:
         limits:
           cpus: '0.37'
-          memory: '0.4GB'
+          memory: '0.7GB'
 
   nginx:
     image: nginx:latest
@@ -48,7 +48,7 @@ services:
     image: mongo:latest
     hostname: db
     environment:
-      - MONGO_INITDB_DATABASE=nestjs
+      - MONGO_INITDB_DATABASE=elysia
       - MONGO_INITDB_ROOT_USERNAME=root
       - MONGO_INITDB_ROOT_PASSWORD=root
     command: mongod --quiet --logpath /dev/null
@@ -70,7 +70,7 @@ services:
       resources:
         limits:
           cpus: '0.05'
-          memory: '0.75GB'
+          memory: '0.15GB'
 
 networks:
   default:
