@@ -6,24 +6,34 @@ import {
   Param,
   Post,
   Query,
+  Res,
   UnprocessableEntityException,
 } from '@nestjs/common';
 import { CreatePersonDto } from './dtos/create-person.dto';
 import { PessoaService } from './pessoa.service';
 import { ObjectId } from 'mongoose';
+import { randomUUID } from 'crypto';
+import { Response } from 'express';
 
 @Controller('pessoas')
 export class PessoaController {
   constructor(private readonly pessoaService: PessoaService) {}
 
   @Post('/')
-  createPerson(@Body() body: CreatePersonDto) {
+  async createPerson(@Res() res: Response, @Body() body: CreatePersonDto) {
     const { nome, apelido, nascimento } = body;
     if (!nome || !apelido || !nascimento) {
       throw new UnprocessableEntityException();
     }
 
-    return this.pessoaService.createPerson(body);
+    const id = randomUUID();
+    await this.pessoaService.createPerson({
+      id,
+      ...body,
+    });
+
+    res.set('Location', `/pessoas/${id}`);
+    res.status(201).send();
   }
 
   @Get('/')
