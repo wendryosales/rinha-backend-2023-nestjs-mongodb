@@ -12,7 +12,7 @@ import {
 } from '@nestjs/common';
 import { CreatePersonDto } from './dtos/create-person.dto';
 import { PessoaService } from './pessoa.service';
-import { UUID, randomUUID } from 'crypto';
+import { randomUUID } from 'crypto';
 import { Response } from 'express';
 import { CacheInterceptor } from '@nestjs/cache-manager';
 
@@ -47,7 +47,7 @@ export class PessoaController {
   }
 
   @Get(':id')
-  getPerson(@Param('id') id: UUID) {
+  getPerson(@Param('id') id: string) {
     return this.pessoaService.getPerson(id);
   }
 }

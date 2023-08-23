@@ -11,7 +11,6 @@ import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
-import { UUID } from 'crypto';
 
 @Injectable()
 export class PessoaService {
@@ -45,7 +44,7 @@ export class PessoaService {
       .exec();
   }
 
-  async getPerson(id: UUID) {
+  async getPerson(id: string) {
     // const cached = await this.cacheManager.get<string>(id);
     // if (!cached) {
     //   throw new NotFoundException();
