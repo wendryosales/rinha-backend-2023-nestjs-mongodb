@@ -1,15 +1,17 @@
 import {
   Inject,
   Injectable,
+  NotFoundException,
   UnprocessableEntityException,
 } from '@nestjs/common';
-import { Model, ObjectId } from 'mongoose';
+import { Model } from 'mongoose';
 import { Pessoa } from './pessoa.interface';
 import { CreatePersonDto } from './dtos/create-person.dto';
 import { InjectQueue } from '@nestjs/bull';
 import { Queue } from 'bull';
 import { CACHE_MANAGER } from '@nestjs/cache-manager';
 import { Cache } from 'cache-manager';
+import { UUID } from 'crypto';
 
 @Injectable()
 export class PessoaService {
@@ -43,8 +45,18 @@ export class PessoaService {
       .exec();
   }
 
-  getPerson(id: ObjectId) {
-    return this.pessoaModel.findById(id).exec();
+  async getPerson(id: UUID) {
+    // const cached = await this.cacheManager.get<string>(id);
+    // if (!cached) {
+    //   throw new NotFoundException();
+    // }
+    // return JSON.parse(cached);
+    //
+    const person = await this.pessoaModel.findById(id).exec();
+    if (!person) {
+      throw new NotFoundException();
+    }
+    return person;
   }
 
   getCount() {

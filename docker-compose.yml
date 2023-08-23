@@ -12,8 +12,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.42'
-          memory: '0.5GB'
+          cpus: '0.37'
+          memory: '0.7GB'
 
   api02:
     build: ./
@@ -26,8 +26,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.42'
-          memory: '0.5GB'
+          cpus: '0.37'
+          memory: '0.7GB'
 
   nginx:
     image: nginx:latest
@@ -41,8 +41,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.25'
-          memory: '0.75GB'
+          cpus: '0.21'
+          memory: '0.7GB'
 
   db:
     image: mongo:latest
@@ -57,8 +57,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.51'
-          memory: '1GB'
+          cpus: '0.5'
+          memory: '0.75GB'
 
   redis:
     image: redis:latest
@@ -69,8 +69,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '0.1'
-          memory: '0.25GB'
+          cpus: '0.05'
+          memory: '0.15GB'
 
 networks:
   default:
